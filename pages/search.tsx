@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactElement, ReactNode, useEffect, useState } from 'react';
 import algoliasearch from 'algoliasearch/lite';
 import {
   Configure,
@@ -15,29 +15,17 @@ import { Post } from '../types/post';
 // var2->var1に変更
 import { SearchIcon } from '@heroicons/react/outline';
 import { format } from 'date-fns';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../firebase/client';
-import { User } from '../types/user';
-import useSWR from 'swr/immutable';
 import Link from 'next/link';
+import { useUser } from '../lib/user';
+import { NextPageWithLayout } from './_app';
+import Layout from '../components/layout';
 const searchClient = algoliasearch(
   'NFBPGPQUY8',
   '57870227630d627e13b9ea9e495f2f84',
 );
 
 const Hit: HitsProps<Post>['hitComponent'] = ({ hit }) => {
-  const { data: user } = useSWR<User>(
-    hit.authorId && `users/${hit.authorId}`,
-    async () => {
-      console.log('データ取得');
-      // documentを確定させ
-      const ref = doc(db, `users/${hit.authorId}`);
-      // 取得し
-      const snap = await getDoc(ref);
-      return snap.data() as User;
-    },
-  );
-
+  const user = useUser(hit.authorId);
   return (
     <div className="rounded-md shadow p-4">
       <h2 className="line-clamp-2">
@@ -68,7 +56,7 @@ const NoResultsBoundary = ({ children }: { children: ReactNode }) => {
   );
 };
 
-const Search = () => {
+const Search: NextPageWithLayout = () => {
   const search: SearchBoxProps['queryHook'] = (query, hook) => {
     console.log('検索実行');
 
@@ -111,5 +99,7 @@ const Search = () => {
     </div>
   );
 };
-
+Search.getLayout = function getLayout(page: ReactElement) {
+  return <Layout>{page}</Layout>;
+};
 export default Search;

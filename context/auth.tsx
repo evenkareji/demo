@@ -36,6 +36,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       unsubribe?.();
 
       setFbUser(resultUser);
+
       if (resultUser) {
         // documentを確定させている
         const ref = doc(db, `users/${resultUser.uid}`);
