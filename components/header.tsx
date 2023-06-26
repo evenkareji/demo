@@ -5,6 +5,7 @@ import Sidebar from './sidebar';
 import UserMenu from './user-menu';
 import { useState } from 'react';
 import { MenuIcon } from '@heroicons/react/outline';
+import Button from './button';
 
 const Header = () => {
   const { user, isLoading } = useAuth();
@@ -21,7 +22,7 @@ const Header = () => {
   };
   return (
     <>
-      <header className="py-4">
+      <header className="py-4 relative z-10">
         <div className="flex items-center h-14 border-b container">
           <button className="p-2 mr-1" onClick={openModal}>
             <MenuIcon className="w-6 h-6" />
@@ -32,6 +33,13 @@ const Header = () => {
             </a>
           </Link>
           <span className="flex-1" />
+          {user && (
+            <Link href="/create-post">
+              <a className="mr-4">
+                <Button>投稿</Button>
+              </a>
+            </Link>
+          )}
           {user ? (
             <UserMenu />
           ) : (

@@ -1,7 +1,8 @@
 import { Dialog, Transition } from '@headlessui/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Fragment, useState } from 'react';
+import { useRouter } from 'next/router';
+import { Fragment, useEffect, useState } from 'react';
 
 const items = [
   {
@@ -52,6 +53,11 @@ const Sidebar = ({
   isOpen: boolean;
   closeModal: VoidFunction;
 }) => {
+  const router = useRouter();
+  useEffect(() => {
+    router.events.on('hashChangeStart', closeModal);
+    return () => router.events.off('hashChangeStart', closeModal);
+  }, []);
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>

@@ -3,4 +3,5 @@ export type User = {
   name: string;
   nicname: string;
   profile: string;
+  avatarURL: string;
 };

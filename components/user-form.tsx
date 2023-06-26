@@ -1,23 +1,38 @@
 import classNames from 'classnames';
-import { doc, setDoc } from 'firebase/firestore';
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadString,
+} from 'firebase/storage';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import Button from '../components/button';
 import { useAuth } from '../context/auth';
-import { db } from '../firebase/client';
+import { db, storage } from '../firebase/client';
 import { User } from '../types/user';
 import ImageSelector from './image-selector';
+import { doc, setDoc } from 'firebase/firestore';
+import { useEffect } from 'react';
 
 const UserForm = ({ isEditMode }: { isEditMode: boolean }) => {
-  const { isLoading, fbUser } = useAuth();
+  const { isLoading, fbUser, user } = useAuth();
   const router = useRouter();
 
   const {
     register,
     handleSubmit,
     watch,
-    formState: { errors },
+    formState: { errors, isSubmitting },
+    control,
+    reset,
   } = useForm<User>();
+
+  useEffect(() => {
+    if (isEditMode && user) {
+      reset(user);
+    }
+  }, [isEditMode, user]);
 
   if (isLoading) {
     return;
@@ -27,12 +42,25 @@ const UserForm = ({ isEditMode }: { isEditMode: boolean }) => {
     return null;
   }
 
-  const submit = (data: User) => {
+  const submit = async (data: User) => {
+    console.log(data);
+    if (data.avatarURL?.match(/^data:/)) {
+      const imageRef = ref(storage, `users/${fbUser.uid}/avatar`);
+      await uploadString(imageRef, data.avatarURL, 'data_url');
+      data.avatarURL = await getDownloadURL(imageRef);
+    }
+
+    if (!data.avatarURL && user?.avatarURL) {
+      const imageRef = ref(storage, `users/${fbUser.uid}/avatar`);
+      await deleteObject(imageRef);
+    }
     // users collectionのmynumberにdocumentを作成
-    const ref = doc(db, `users/${fbUser.uid}`);
-    setDoc(ref, data).then(() => {
-      alert('ユーザーを作成しました');
-      router.push('/');
+    const documentRef = doc(db, `users/${fbUser.uid}`);
+    return setDoc(documentRef, data).then(() => {
+      alert(isEditMode ? '更新しました' : 'ユーザーを作成しました');
+      if (!isEditMode) {
+        router.push('/');
+      }
     });
   };
   return (
@@ -41,7 +69,7 @@ const UserForm = ({ isEditMode }: { isEditMode: boolean }) => {
       <form onSubmit={handleSubmit(submit)} className="space-y-6">
         <div>
           <h2>プロフィール画像</h2>
-          <ImageSelector />
+          <ImageSelector name="avatarURL" control={control} />
         </div>
         <div>
           <label className="block mb-0.5" htmlFor="name">
@@ -121,7 +149,9 @@ const UserForm = ({ isEditMode }: { isEditMode: boolean }) => {
           )}
         </div>
 
-        <Button>{isEditMode ? '更新' : 'アカウント作成'}</Button>
+        <Button disabled={isSubmitting}>
+          {isEditMode ? '更新' : 'アカウント作成'}
+        </Button>
       </form>
     </div>
   );

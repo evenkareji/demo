@@ -1,43 +1,25 @@
-import React, { ReactElement, ReactNode, useEffect, useState } from 'react';
 import algoliasearch from 'algoliasearch/lite';
+import { debounce } from 'debounce';
+import { ReactElement, ReactNode } from 'react';
 import {
   Configure,
   Hits,
-  HitsProps,
   InstantSearch,
   Pagination,
   SearchBox,
   SearchBoxProps,
   useInstantSearch,
 } from 'react-instantsearch-hooks-web';
-import { debounce } from 'debounce';
 import { Post } from '../types/post';
 // var2->var1に変更
 import { SearchIcon } from '@heroicons/react/outline';
-import { format } from 'date-fns';
-import Link from 'next/link';
-import { useUser } from '../lib/user';
-import { NextPageWithLayout } from './_app';
 import Layout from '../components/layout';
+import PostItemCard from '../components/post-item-card';
+import { NextPageWithLayout } from './_app';
 const searchClient = algoliasearch(
   'NFBPGPQUY8',
   '57870227630d627e13b9ea9e495f2f84',
 );
-
-const Hit: HitsProps<Post>['hitComponent'] = ({ hit }) => {
-  const user = useUser(hit.authorId);
-  return (
-    <div className="rounded-md shadow p-4">
-      <h2 className="line-clamp-2">
-        <Link href={`/posts/${hit.id}`}>
-          <a> {hit.title}</a>
-        </Link>
-      </h2>
-      <p className="text-slate-500">{format(hit.createdAt, 'yyyy/MM/dd')}</p>
-      {user && <p className="truncate">{user.name}</p>}
-    </div>
-  );
-};
 
 const NoResultsBoundary = ({ children }: { children: ReactNode }) => {
   const { results } = useInstantSearch();
@@ -84,7 +66,7 @@ const Search: NextPageWithLayout = () => {
         <NoResultsBoundary>
           <Hits<Post>
             classNames={{ list: 'space-y-4 my-6' }}
-            hitComponent={Hit}
+            hitComponent={({ hit }) => <PostItemCard post={hit} />}
           />
           <Pagination
             classNames={{

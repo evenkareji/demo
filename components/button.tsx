@@ -8,7 +8,7 @@ const Button = ({
   // 関数を展開する時{}を使うから{...props}としてある
   return (
     <button
-      className="px-4 py-2 rounded-full bg-blue-500 text-white"
+      className="px-4 py-2 rounded-full bg-blue-500 text-white disabled:opacity-30"
       {...props}
     >
       {children}

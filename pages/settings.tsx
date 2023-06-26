@@ -4,7 +4,7 @@ import { NextPageWithLayout } from './_app';
 
 const Settings: NextPageWithLayout = () => {
   return (
-    <div>
+    <div className="container">
       <h1>設定画面</h1>
       <p>
         Lorem ipsum, dolor sit amet consectetur adipisicing elit. Obcaecati nisi
