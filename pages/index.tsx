@@ -13,6 +13,7 @@ export const getStaticProps: GetStaticProps<{ posts: Post[] }> = async (
   conetxt,
 ) => {
   // postの単体を取得するときはdoc。post全てを取得するときはcollection
+
   const snap = await adminDB
     .collection('posts')
     .orderBy('createdAt', 'desc')
@@ -41,7 +42,7 @@ const Home: NextPageWithLayout<
       <main className="container">
         <h2>最新の記事</h2>
         {posts.length ? (
-          <ul className="space-y-3">
+          <ul className="space-y-5 mt-6">
             {posts?.map((post) => (
               <li key={post.id}>
                 <PostItemCard post={post} />

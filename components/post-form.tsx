@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { Post } from '../types/post';
 import classNames from 'classnames';
-import Button from '../components/button';
 import { collection, deleteDoc, doc, getDoc, setDoc } from 'firebase/firestore';
-import { auth, db } from '../firebase/client';
-import { useAuth } from '../context/auth';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import Button from '../components/button';
+import { useAuth } from '../context/auth';
+import { db } from '../firebase/client';
 import { revalidate } from '../lib/revalidate';
+import { Post } from '../types/post';
 
 const PostForm = ({ isEditMode }: { isEditMode: boolean }) => {
   const {

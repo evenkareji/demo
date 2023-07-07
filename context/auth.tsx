@@ -28,6 +28,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>();
   const [isLoading, setIsLoading] = useState(true);
   const [fbUser, setFbUser] = useState<FirebaseUser | null>();
+  const [test, setTest] = useState('before');
+
   // valueの中身が変化するタイミング
   useEffect(() => {
     let unsubribe: Unsubscribe;
@@ -60,3 +62,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 export const useAuth = () => useContext(AuthContext);
+
+// isLoadingは常にtrue状態
+// auth.tsxでisLaodingの状態変化は常に監視される
+// userのデータをとってこれたときにはfalseのなるからロードを表示するには重要？

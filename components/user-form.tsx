@@ -149,6 +149,8 @@ const UserForm = ({ isEditMode }: { isEditMode: boolean }) => {
           )}
         </div>
 
+        {/* ボタンを押した時にformの関数が実行される */}
+        {/* その時に編集、削除ボタンが実行されないようにbutton type='button'としてform実行時に同時に実行されないようにする */}
         <Button disabled={isSubmitting}>
           {isEditMode ? '更新' : 'アカウント作成'}
         </Button>
