@@ -16,10 +16,7 @@ import {
   useController,
 } from 'react-hook-form';
 
-const ImageSelector = <T extends FieldValues>({
-  control,
-  name,
-}: UseControllerProps<T>) => {
+const ImageSelector = ({ control, name }: UseControllerProps<any>) => {
   const [selectedImage, setSelectedImage] = useState<File | null>();
   const [scale, setScale] = useState<number>(1.5);
   const ref = useRef<AvatarEditor>(null);
@@ -52,7 +49,7 @@ const ImageSelector = <T extends FieldValues>({
 
   const getCroppedImage = () => {
     const image = ref.current?.getImage();
-    const canvas = document.createElement('canvas');
+    const canvas: any = document.createElement('canvas');
 
     canvas.width = 80;
     canvas.height = 80;
