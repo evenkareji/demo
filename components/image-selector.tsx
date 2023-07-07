@@ -55,7 +55,7 @@ const ImageSelector = ({ control, name }: UseControllerProps<any>) => {
     canvas.height = 80;
     const ctx = canvas.getContext('2d');
     ctx?.drawImage(image!, 0, 0, 80, 80);
-    field.onChange(canvas.toDataURL('image/png'));
+    field.onChange(canvas.toDataURL(''));
     //kk
     closeModal();
   };
