@@ -25,7 +25,7 @@ const ImageSelector = <T extends FieldValues>({
   const ref = useRef<AvatarEditor>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const { field } = useController({
+  const { field }: any = useController({
     name,
     control,
   });
