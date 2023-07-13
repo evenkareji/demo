@@ -40,7 +40,7 @@ const Footer = () => {
             ))}
           </ul>
         </div>
-        <p className="mt-4 text-slate-500">© 2023 tomo.</p>
+        <p className="mt-4 text-slate-500">© 2023 yousuke.</p>
       </div>
     </footer>
   );
