@@ -61,7 +61,11 @@ const Sidebar = ({
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="fixed z-index inset-0" onClose={closeModal}>
+        <Dialog
+          as="div"
+          className="fixed z-index z-20 inset-0"
+          onClose={closeModal}
+        >
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
