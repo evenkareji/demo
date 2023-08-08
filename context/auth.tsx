@@ -66,3 +66,4 @@ export const useAuth = () => useContext(AuthContext);
 // isLoadingは常にtrue状態
 // auth.tsxでisLaodingの状態変化は常に監視される
 // userのデータをとってこれたときにはfalseのなるからロードを表示するには重要？
+// gggg
